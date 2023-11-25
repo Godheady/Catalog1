@@ -1,0 +1,54 @@
+﻿@page "/catalog"
+@using BlazorApp.Client.Shared
+
+<PageTitle>Catalog</PageTitle>
+
+<h3>Каталог услуг</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Название</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in services)
+        {
+            <tr>
+                <td>@service.Id</td>
+                <td>@service.Name</td>
+                <td><button @onclick="() => RemoveService(service.Id)">Удалить</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <h4>Добавить новую услугу</h4>
+    <input type="text" @bind="newServiceName" />
+    <button @onclick="AddService">Добавить</button>
+</div>
+
+@code {
+    List<Service> services = new List<Service>();
+    string newServiceName;
+
+    void AddService()
+    {
+        int id = services.Count + 1;
+        Service service = new Service { Id = id, Name = newServiceName };
+        services.Add(service);
+        newServiceName = string.Empty;
+    }
+
+    void RemoveService(int id)
+    {
+        Service service = services.FirstOrDefault(s => s.Id == id);
+        if (service != null)
+        {
+            services.Remove(service);
+        }
+    }
+}
